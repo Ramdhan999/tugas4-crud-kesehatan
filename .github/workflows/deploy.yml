@@ -15,9 +15,10 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Deploy ke EC2
+     - name: Deploy ke EC2
         run: |
           ssh -o StrictHostKeyChecking=no ubuntu@16.176.15.48 << 'EOF'
+          set -e  # Berhenti langsung kalau ada perintah yang gagal
           cd /var/www/tugas4-crud-kesehatan
           git pull origin main
           sudo systemctl restart nginx

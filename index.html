@@ -3,87 +3,137 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CRUD Data Pasien - Glassmorphism</title>
+    <title>CRUD Data Pasien</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #4F46E5;
             --primary-hover: #4338CA;
             --danger: #EF4444;
+            --danger-hover: #DC2626;
+            --warning: #F59E0B;
+            --warning-hover: #D97706;
+            --bg: #F3F4F6;
             --text: #1F2937;
         }
         
         body { 
             font-family: 'Inter', sans-serif; 
-            /* Gradien background biar efek kaca kelihatan */
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            background-attachment: fixed;
+            background-color: var(--bg); 
             color: var(--text);
             padding: 40px 20px; 
             display: flex;
             justify-content: center;
             margin: 0;
-            min-height: 100vh;
         }
 
+        /* Bikin form-nya seolah melayang di tengah (Card Style) */
         .container {
-            /* Efek Glassmorphism */
-            background: rgba(255, 255, 255, 0.75); 
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            
+            background: white;
             padding: 30px;
-            border-radius: 16px;
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             width: 100%;
             max-width: 800px;
         }
 
-        h2 { text-align: center; margin-bottom: 25px; color: #111827; }
+        h2 {
+            text-align: center;
+            margin-top: 0;
+            margin-bottom: 25px;
+            color: #111827;
+            font-weight: 600;
+        }
 
         form { 
             display: grid; 
             gap: 15px; 
             margin-bottom: 30px; 
-            background: rgba(255, 255, 255, 0.5);
+            background: #F9FAFB;
             padding: 20px;
-            border-radius: 12px;
+            border-radius: 8px;
+            border: 1px solid #E5E7EB;
         }
 
         input { 
-            padding: 12px; 
-            border: 1px solid rgba(0,0,0,0.1); 
-            border-radius: 8px; 
-            background: rgba(255, 255, 255, 0.8);
+            padding: 12px 15px; 
+            border: 1px solid #D1D5DB; 
+            border-radius: 6px; 
+            font-size: 15px;
+            font-family: inherit;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
         }
 
         button { 
             padding: 12px; 
-            border-radius: 8px; 
-            font-weight: 500; 
-            cursor: pointer; 
-            transition: 0.3s;
-        }
-
-        #btnSubmit { background: var(--primary); color: white; border: none; }
-        #btnSubmit:hover { background: var(--primary-hover); transform: scale(1.02); }
-
-        table { width: 100%; border-collapse: collapse; }
-        th { text-align: left; padding: 15px; border-bottom: 2px solid rgba(0,0,0,0.05); }
-        td { padding: 15px; border-bottom: 1px solid rgba(0,0,0,0.05); }
-
-        .btn-action { padding: 6px 12px; font-size: 13px; border: none; color: white; margin-right: 5px; }
-        .btn-edit { background: #F59E0B; }
-        .btn-delete { background: var(--danger); }
-        
-        .badge {
-            background: #E0E7FF; 
-            color: #3730A3; 
-            padding: 4px 8px; 
+            border: none; 
             border-radius: 6px; 
-            font-size: 13px;
+            font-weight: 500;
+            font-family: inherit;
+            cursor: pointer; 
+            transition: all 0.2s;
+            font-size: 15px;
         }
+
+        #btnSubmit {
+            background-color: var(--primary); 
+            color: white; 
+            margin-top: 5px;
+        }
+
+        #btnSubmit:hover { 
+            background-color: var(--primary-hover); 
+            transform: translateY(-1px);
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+        }
+
+        th, td { 
+            padding: 15px; 
+            text-align: left; 
+            border-bottom: 1px solid #E5E7EB; 
+        }
+
+        th { 
+            background-color: #F9FAFB; 
+            font-weight: 600;
+            color: #4B5563;
+        }
+
+        tr:hover {
+            background-color: #F9FAFB;
+        }
+
+        .btn-action {
+            padding: 6px 12px;
+            font-size: 13px;
+            margin-right: 5px;
+        }
+
+        .btn-edit { 
+            background-color: var(--warning); 
+            color: white; 
+        }
+        .btn-edit:hover { background-color: var(--warning-hover); }
+
+        .btn-delete { 
+            background-color: var(--danger); 
+            color: white; 
+        }
+        .btn-delete:hover { background-color: var(--danger-hover); }
     </style>
 </head>
 <body>
@@ -93,37 +143,41 @@
         
         <form id="formPasien">
             <input type="hidden" id="indexPasien">
-            <input type="text" id="nama" placeholder="Nama Pasien" required>
-            <input type="number" id="umur" placeholder="Umur" required>
-            <input type="text" id="diagnosa" placeholder="Diagnosa" required>
-            <button type="submit" id="btnSubmit">Simpan Data</button>
+            <input type="text" id="nama" placeholder="Masukkan Nama Pasien" required>
+            <input type="number" id="umur" placeholder="Masukkan Umur (Tahun)" required>
+            <input type="text" id="diagnosa" placeholder="Diagnosa Penyakit" required>
+            <button type="submit" id="btnSubmit">Simpan Data Pasien</button>
         </form>
 
-        <table>
-            <thead>
-                <tr>
-                    <th>Pasien</th>
-                    <th>Umur</th>
-                    <th>Diagnosa</th>
-                    <th>Aksi</th>
-                </tr>
-            </thead>
-            <tbody id="tabelPasien"></tbody>
-        </table>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nama Pasien</th>
+                        <th>Umur</th>
+                        <th>Diagnosa</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody id="tabelPasien">
+                    </tbody>
+            </table>
+        </div>
     </div>
 
     <script src="script.js"></script>
     <script>
-        // Override renderTable biar match style baru
+        // Update dikit renderTable di script.js lu dari sini aja biar class buttonnya match
         function renderTable() {
             const tbody = document.getElementById('tabelPasien');
             tbody.innerHTML = '';
+            
             dataPasien.forEach((pasien, index) => {
                 tbody.innerHTML += `
                     <tr>
-                        <td><strong>${pasien.nama}</strong></td>
-                        <td>${pasien.umur} Thn</td>
-                        <td><span class="badge">${pasien.diagnosa}</span></td>
+                        <td>${pasien.nama}</td>
+                        <td>${pasien.umur} Tahun</td>
+                        <td><span style="background: #E0E7FF; color: #3730A3; padding: 4px 8px; border-radius: 4px; font-size: 13px; font-weight: 500;">${pasien.diagnosa}</span></td>
                         <td>
                             <button class="btn-edit btn-action" onclick="editData(${index})">Edit</button>
                             <button class="btn-delete btn-action" onclick="hapusData(${index})">Hapus</button>
@@ -132,7 +186,6 @@
                 `;
             });
         }
-        renderTable();
     </script>
 </body>
 </html>
