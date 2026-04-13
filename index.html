@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRUD Data Pasien</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; max-width: 600px; margin: auto; }
+        form { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+        input { padding: 8px; }
+        button { padding: 10px; background-color: #28a745; color: white; border: none; cursor: pointer; }
+        button:hover { background-color: #218838; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        .btn-delete { background-color: #dc3545; padding: 5px 10px; }
+        .btn-edit { background-color: #ffc107; padding: 5px 10px; color: black; }
+    </style>
+</head>
+<body>
+
+    <h2>Aplikasi CRUD Kesehatan</h2>
+    
+    <form id="formPasien">
+        <input type="hidden" id="indexPasien">
+        <input type="text" id="nama" placeholder="Nama Pasien" required>
+        <input type="number" id="umur" placeholder="Umur" required>
+        <input type="text" id="diagnosa" placeholder="Diagnosa" required>
+        <button type="submit" id="btnSubmit">Simpan Data</button>
+    </form>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Nama</th>
+                <th>Umur</th>
+                <th>Diagnosa</th>
+                <th>Aksi</th>
+            </tr>
+        </thead>
+        <tbody id="tabelPasien">
+            </tbody>
+    </table>
+
+    <script src="script.js"></script>
+</body>
+</html>
